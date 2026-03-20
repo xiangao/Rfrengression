@@ -1,0 +1,104 @@
+---
+title: "Binary Treatment: Average Treatment Effect"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Binary Treatment: Average Treatment Effect}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 7,
+  fig.height = 5
+)
+```
+
+## Overview
+
+This vignette demonstrates frengression for binary treatment data.
+We estimate the Average Treatment Effect (ATE) and compare with a
+simple doubly-robust estimator.
+
+## Data Generating Process
+
+- $Z \sim N(0, 1)$
+- $X \sim \text{Bernoulli}(\text{logit}^{-1}(Z))$ (confounded treatment)
+- $Y = 2X + Z + \varepsilon$, where $\varepsilon \sim N(0, 0.5^2)$
+
+True ATE = $E[Y|do(X=1)] - E[Y|do(X=0)] = 2$.
+
+```{r data}
+library(Rfrengression)
+set.seed(123)
+
+n <- 3000
+z <- matrix(rnorm(n), ncol = 1)
+prob_x <- plogis(z)
+x <- matrix(rbinom(n, 1, prob_x), ncol = 1)
+y <- 2 * x + z + matrix(rnorm(n, sd = 0.5), ncol = 1)
+
+cat("Treatment prevalence:", mean(x), "\n")
+cat("Naive difference-in-means:", mean(y[x == 1]) - mean(y[x == 0]), "\n")
+cat("(biased due to confounding)\n")
+```
+
+## Train Frengression
+
+```{r train, eval = torch::torch_is_installed()}
+model <- frengression(x_dim = 1, y_dim = 1, z_dim = 1,
+                      x_binary = TRUE, noise_dim = 5)
+
+model <- train_y(model, x, z, y, num_iters = 500, lr = 1e-3,
+                 print_every = 100)
+model <- train_xz(model, x, z, num_iters = 500, lr = 1e-4,
+                   print_every = 100)
+```
+
+## Estimate ATE
+
+```{r ate, eval = torch::torch_is_installed()}
+# E[Y | do(X=1)]
+y1 <- predict(model, matrix(1, ncol = 1), type = "mean", nsample = 1000)
+# E[Y | do(X=0)]
+y0 <- predict(model, matrix(0, ncol = 1), type = "mean", nsample = 1000)
+
+ate_freng <- y1 - y0
+cat("Frengression ATE estimate:", ate_freng, "\n")
+cat("True ATE: 2\n")
+```
+
+## Compare: Simple DR Estimator
+
+```{r dr, eval = torch::torch_is_installed()}
+# Simple DR estimator for comparison
+# Convert matrix columns to vectors for lm/glm
+xv <- as.numeric(x)
+yv <- as.numeric(y)
+zv <- as.numeric(z)
+
+e_hat <- glm(xv ~ zv, family = binomial)$fitted.values
+mu1_hat <- predict(lm(yv ~ zv, subset = xv == 1), newdata = data.frame(zv = zv))
+mu0_hat <- predict(lm(yv ~ zv, subset = xv == 0), newdata = data.frame(zv = zv))
+
+dr_ate <- mean(mu1_hat - mu0_hat +
+               xv * (yv - mu1_hat) / e_hat -
+               (1 - xv) * (yv - mu0_hat) / (1 - e_hat))
+cat("Doubly-robust ATE estimate:", dr_ate, "\n")
+```
+
+## Visualize Causal Margin Distributions
+
+```{r plot, eval = torch::torch_is_installed(), fig.cap = "Distribution of Y under do(X=0) and do(X=1)"}
+y_samples_1 <- sample_causal_margin(model, matrix(1, ncol = 1), sample_size = 500)
+y_samples_0 <- sample_causal_margin(model, matrix(0, ncol = 1), sample_size = 500)
+
+hist(as.numeric(y_samples_1), breaks = 30, col = rgb(1, 0, 0, 0.4),
+     main = "Causal Margin: P(Y | do(X))", xlab = "Y",
+     xlim = range(c(as.numeric(y_samples_0), as.numeric(y_samples_1))))
+hist(as.numeric(y_samples_0), breaks = 30, col = rgb(0, 0, 1, 0.4), add = TRUE)
+legend("topright", c("do(X=1)", "do(X=0)"),
+       fill = c(rgb(1, 0, 0, 0.4), rgb(0, 0, 1, 0.4)))
+```
