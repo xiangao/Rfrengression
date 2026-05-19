@@ -11,7 +11,7 @@ Description: Deep generative models for causal data simulation. Learns joint
     survival (FrengressionSurv). Based on "Frugal, Flexible, Faithful: Causal
     Data Simulation via Frengression" by Shen and Meinshausen (2025)
     <arxiv:2508.01018>.
-URL: https://github.com/xwshen51/frengression/
+URL: https://xiangao.github.io/Rfrengression/, https://github.com/xwshen51/frengression/
 BugReports: https://github.com/xwshen51/frengression/issues
 License: MIT + file LICENSE
 Encoding: UTF-8

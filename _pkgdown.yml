@@ -1,0 +1,48 @@
+url: https://xiangao.github.io/Rfrengression/
+
+template:
+  bootstrap: 5
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+
+reference:
+  - title: Model constructors
+    contents:
+      - frengression
+      - frengression_seq
+      - frengression_surv
+  - title: Training and causal specification
+    contents:
+      - train_y
+      - train_xz
+      - train_e
+      - specify_causal
+      - reset_y_models
+  - title: Prediction and sampling
+    contents:
+      - predict_causal
+      - sample_joint
+      - sample_xz
+      - sample_causal_margin
+  - title: Methods
+    contents:
+      - predict.frengression_seq
+      - print.frengression
+      - print.frengression_seq
+      - print.frengression_surv
+
+articles:
+  - title: Vignettes
+    contents:
+      - continuous
+      - binary
+      - distributional
+      - longitudinal
+
+home:
+  links:
+    - text: Frengression paper
+      href: https://arxiv.org/abs/2508.01018

@@ -1,5 +1,7 @@
 # Rfrengression
 
+[![pkgdown](https://img.shields.io/badge/pkgdown-site-blue.svg)](https://xiangao.github.io/Rfrengression/)
+
 Native R package for **Frengression** — Frugal, Flexible, Faithful Causal Data Simulation.
 
 Learns joint distributions P(X, Y, Z) of treatments, outcomes, and confounders from observed data, then enables interventional sampling via `sample_causal_margin()` and custom causal mechanisms via `specify_causal()`.
@@ -67,10 +69,15 @@ joint_new <- sample_joint(model, sample_size = 1000)
 
 ## Vignettes
 
-- **continuous** — Continuous treatment ADRF estimation
-- **binary** — Binary treatment ATE estimation
-- **distributional** — Specifying custom causal margins
-- **longitudinal** — Time-varying data with FrengressionSeq
+Full documentation: **<https://xiangao.github.io/Rfrengression/>**
+
+| Vignette | Description |
+|----------|-------------|
+| [Continuous](https://xiangao.github.io/Rfrengression/articles/continuous.html) | Continuous treatment ADRF estimation |
+| [Binary](https://xiangao.github.io/Rfrengression/articles/binary.html) | Binary treatment ATE estimation |
+| [Distributional](https://xiangao.github.io/Rfrengression/articles/distributional.html) | Specifying custom causal margins |
+| [Longitudinal](https://xiangao.github.io/Rfrengression/articles/longitudinal.html) | Time-varying data with `FrengressionSeq` |
+| [Reference index](https://xiangao.github.io/Rfrengression/reference/index.html) | All documented functions on one page |
 
 ## Dependencies
 
