@@ -50,8 +50,7 @@
 <div class="page-header"><h1 id="rfrengression">Rfrengression<a class="anchor" aria-label="anchor" href="#rfrengression"></a>
 </h1></div>
 <p><a href="https://xiangao.github.io/Rfrengression/"><img src="https://img.shields.io/badge/pkgdown-site-blue.svg" alt="pkgdown"></a></p>
-<p>Native R package for <strong>Frengression</strong> — Frugal, Flexible, Faithful Causal Data Simulation.</p>
-<p>Learns joint distributions P(X, Y, Z) of treatments, outcomes, and confounders from observed data, then enables interventional sampling via <code><a href="reference/sample_causal_margin.html">sample_causal_margin()</a></code> and custom causal mechanisms via <code><a href="reference/specify_causal.html">specify_causal()</a></code>.</p>
+<p><code>Rfrengression</code> is an R implementation of frengression: a way to learn a joint distribution for treatments, outcomes, and covariates, and then sample from interventions. In practice I use <code><a href="reference/sample_causal_margin.html">sample_causal_margin()</a></code> for <code>do(X=x)</code> draws and <code><a href="reference/specify_causal.html">specify_causal()</a></code> when I want to replace the causal margin by a known mechanism.</p>
 <p>Based on <a href="https://arxiv.org/abs/2508.01018" class="external-link">Shen &amp; Meinshausen (2025), arXiv:2508.01018</a>.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
@@ -126,7 +125,7 @@
 </table>
 </div>
 <div class="section level2">
-<h2 id="key-functions">Key Functions<a class="anchor" aria-label="anchor" href="#key-functions"></a>
+<h2 id="main-functions">Main functions<a class="anchor" aria-label="anchor" href="#main-functions"></a>
 </h2>
 <ul>
 <li>

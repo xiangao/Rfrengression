@@ -2,14 +2,13 @@
 
 [![pkgdown](https://img.shields.io/badge/pkgdown-site-blue.svg)](https://xiangao.github.io/Rfrengression/)
 
-Native R package for **Frengression** — Frugal, Flexible, Faithful
-Causal Data Simulation.
-
-Learns joint distributions P(X, Y, Z) of treatments, outcomes, and
-confounders from observed data, then enables interventional sampling via
+`Rfrengression` is an R implementation of frengression: a way to learn a
+joint distribution for treatments, outcomes, and covariates, and then
+sample from interventions. In practice I use
 [`sample_causal_margin()`](https://xiangao.github.io/Rfrengression/reference/sample_causal_margin.md)
-and custom causal mechanisms via
-[`specify_causal()`](https://xiangao.github.io/Rfrengression/reference/specify_causal.md).
+for `do(X=x)` draws and
+[`specify_causal()`](https://xiangao.github.io/Rfrengression/reference/specify_causal.md)
+when I want to replace the causal margin by a known mechanism.
 
 Based on [Shen & Meinshausen (2025),
 arXiv:2508.01018](https://arxiv.org/abs/2508.01018).
@@ -63,7 +62,7 @@ joint_new <- sample_joint(model, sample_size = 1000)
 | [`frengression_seq()`](https://xiangao.github.io/Rfrengression/reference/frengression_seq.md) | Longitudinal / time-varying | `frengression_seq(x_dim, y_dim, z_dim, T_steps, s_dim)` |
 | [`frengression_surv()`](https://xiangao.github.io/Rfrengression/reference/frengression_surv.md) | Survival / time-to-event | `frengression_surv(x_dim, y_dim, z_dim, T_steps, s_dim)` |
 
-## Key Functions
+## Main functions
 
 - [`train_y()`](https://xiangao.github.io/Rfrengression/reference/train_y.md)
   — Train outcome model (model_y + model_eta)
