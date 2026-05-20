@@ -2,9 +2,11 @@
 
 [![pkgdown](https://img.shields.io/badge/pkgdown-site-blue.svg)](https://xiangao.github.io/Rfrengression/)
 
-Native R package for **Frengression** — Frugal, Flexible, Faithful Causal Data Simulation.
-
-Learns joint distributions P(X, Y, Z) of treatments, outcomes, and confounders from observed data, then enables interventional sampling via `sample_causal_margin()` and custom causal mechanisms via `specify_causal()`.
+`Rfrengression` is an R implementation of frengression: a way to learn a joint
+distribution for treatments, outcomes, and covariates, and then sample from
+interventions. In practice I use `sample_causal_margin()` for `do(X=x)` draws
+and `specify_causal()` when I want to replace the causal margin by a known
+mechanism.
 
 Based on [Shen & Meinshausen (2025), arXiv:2508.01018](https://arxiv.org/abs/2508.01018).
 
@@ -55,7 +57,7 @@ joint_new <- sample_joint(model, sample_size = 1000)
 | `frengression_seq()` | Longitudinal / time-varying | `frengression_seq(x_dim, y_dim, z_dim, T_steps, s_dim)` |
 | `frengression_surv()` | Survival / time-to-event | `frengression_surv(x_dim, y_dim, z_dim, T_steps, s_dim)` |
 
-## Key Functions
+## Main functions
 
 - `train_y()` — Train outcome model (model_y + model_eta)
 - `train_xz()` — Train marginal model P(X, Z)
