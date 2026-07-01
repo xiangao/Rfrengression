@@ -460,14 +460,19 @@ train_y.frengression_surv <- function(model, s, x, z, y,
     # Marginal constraint
     eta_true <- torch_randn(c(n, model$y_dim * model$T_steps))
 
-    # Sample z from model_e
+    # Sample z from model_e. model_eta[[t]] was built to consume z-history
+    # up to AND INCLUDING t (s_dim + (x_dim+z_dim)*t, matching the observed-z
+    # branch above which uses z_list[[t]], cumulative through t). Passing
+    # T_partial = t - 1 here under-fills that width by one z_dim block and
+    # crashes with a matmul shape mismatch as soon as T_steps >= 3; it must
+    # be T_partial = t to generate z-history through the current step.
     z_s1 <- list(model$model_e[[1]]$forward(s_list[[1]]))
     z_s2 <- list(model$model_e[[1]]$forward(s_list[[1]]))
     for (t in seq(2, model$T_steps)) {
       z_s1[[t]] <- .surv_sample_e_partial(model, s_list[[t]],
-                                           x_list[[t]][, 1:((t - 1) * model$x_dim), drop = FALSE], t - 1)
+                                           x_list[[t]][, 1:((t - 1) * model$x_dim), drop = FALSE], t)
       z_s2[[t]] <- .surv_sample_e_partial(model, s_list[[t]],
-                                           x_list[[t]][, 1:((t - 1) * model$x_dim), drop = FALSE], t - 1)
+                                           x_list[[t]][, 1:((t - 1) * model$x_dim), drop = FALSE], t)
     }
 
     eta1 <- list()
