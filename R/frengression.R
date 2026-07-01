@@ -97,6 +97,7 @@ train_y.frengression <- function(model, x, z, y,
   xz <- torch_cat(list(x, z), dim = 2)
   lossvec <- matrix(nrow = num_iters, ncol = 4)
   colnames(lossvec) <- c("loss", "loss_y", "loss1_y", "loss_eta")
+  n_completed <- 0
 
   for (i in seq_len(num_iters)) {
     optimizer$zero_grad()
@@ -133,6 +134,7 @@ train_y.frengression <- function(model, x, z, y,
 
     lossvec[i, ] <- c(as.numeric(loss), as.numeric(el_y$loss),
                       as.numeric(el_y$loss1), as.numeric(el_eta$loss))
+    n_completed <- n_completed + 1
 
     if (!silent && ((i == 1) || (i %% print_every == 0))) {
       cat(sprintf("Epoch %d: loss %.4f, loss_y %.4f (%.4f, %.4f), loss_eta %.4f (%.4f, %.4f)\n",
@@ -145,7 +147,7 @@ train_y.frengression <- function(model, x, z, y,
 
   model$model_y$model$eval()
   model$model_eta$model$eval()
-  model$lossvec_y <- lossvec[seq_len(min(i, num_iters)), , drop = FALSE]
+  model$lossvec_y <- lossvec[seq_len(n_completed), , drop = FALSE]
   model
 }
 
