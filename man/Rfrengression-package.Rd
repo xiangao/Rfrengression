@@ -11,6 +11,7 @@ Deep generative models for causal data simulation. Learns joint distributions of
 \seealso{
 Useful links:
 \itemize{
+  \item \url{https://xiangao.github.io/Rfrengression/}
   \item \url{https://github.com/xwshen51/frengression/}
   \item Report bugs at \url{https://github.com/xwshen51/frengression/issues}
 }
@@ -21,6 +22,7 @@ Useful links:
 
 Authors:
 \itemize{
+  \item Nicolai Meinshausen \email{meinshausen@stat.math.ethz.ch}
   \item Xinwei Shen \email{xinwei.shen@stat.math.ethz.ch}
 }
 
