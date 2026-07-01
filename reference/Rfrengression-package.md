@@ -12,6 +12,8 @@ Causal Data Simulation via Frengression" by Shen and Meinshausen (2025)
 
 Useful links:
 
+- <https://xiangao.github.io/Rfrengression/>
+
 - <https://github.com/xwshen51/frengression/>
 
 - Report bugs at <https://github.com/xwshen51/frengression/issues>
@@ -21,5 +23,7 @@ Useful links:
 **Maintainer**: Nicolai Meinshausen <meinshausen@stat.math.ethz.ch>
 
 Authors:
+
+- Nicolai Meinshausen <meinshausen@stat.math.ethz.ch>
 
 - Xinwei Shen <xinwei.shen@stat.math.ethz.ch>
