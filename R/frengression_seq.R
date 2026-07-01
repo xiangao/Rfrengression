@@ -128,7 +128,14 @@ frengression_seq <- function(x_dim, y_dim, z_dim, T_steps, s_dim,
                                x[, 1:((t - 1) * model$x_dim), drop = FALSE],
                                z[, 1:((t - 1) * model$z_dim), drop = FALSE]), dim = 2)
     } else {
-      sxz_p <- torch_cat(list(s, x_all[[t - 1]], z_all[[t - 1]]), dim = 2)
+      # Must match the cumulative-history convention used by the training
+      # path above (and by .seq_sample_eta/.seq_sample_y): concatenate ALL
+      # generated (x, z) up to t-1, not just the single previous time step.
+      # model_xz[[t]] was built expecting that growing width; feeding only
+      # the last step's slice previously crashed with a shape mismatch for
+      # any T_steps >= 3 (T_steps == 2 happens to coincide, which is why
+      # this went unnoticed).
+      sxz_p <- torch_cat(c(list(s), x_all[seq_len(t - 1)], z_all[seq_len(t - 1)]), dim = 2)
     }
     xz <- model$model_xz[[t]]$forward(sxz_p)
     xt <- xz[, 1:model$x_dim, drop = FALSE]
